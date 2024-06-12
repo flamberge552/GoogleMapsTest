@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoogleMapsTest", "GoogleMapsTest\GoogleMapsTest.csproj", "{4B8683BE-2139-4182-AC44-D8A010FC808A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoogleMapsTest", "GoogleMapsTest\GoogleMapsTest.csproj", "{4B8683BE-2139-4182-AC44-D8A010FC808A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{807EC0AA-2469-46C8-A075-AF182A6D97E4}"
+	ProjectSection(SolutionItems) = preProject
+		test.runsettings = test.runsettings
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

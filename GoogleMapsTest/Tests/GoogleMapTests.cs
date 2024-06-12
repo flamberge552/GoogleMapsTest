@@ -1,58 +1,91 @@
-using NUnit.Framework;
-using OpenQA.Selenium;
-
 using GoogleMapsTest.Pages;
 using GoogleMapsTest.Core;
-using System.Runtime.CompilerServices;
+using System.Configuration;
 
 namespace GoogleMapsTest.Tests
-{
+{ 
+
     [TestFixture]
-    //[Parallelizable(ParallelScope.All)]
     public class Tests
     {
-        public BrowserType browserType = BrowserType.CHROME;
         MapPage mapPage;
+        SideMenuPage sideMenuPage;
 
         [SetUp]
         public void Setup()
         {
-            Console.WriteLine("Setting stuff up");
+            Console.WriteLine("Setup");
 
-            WebDriverManager.CreateDriver(browserType);
-            mapPage = new MapPage(WebDriverManager.GetDriver());
+            WebDriverManager.CreateDriver(BrowserType.CHROME);
+            mapPage = new MapPage();
         }
 
         [TearDown]
         public void Teardown()
         {
-            Console.WriteLine("Cleaning up");
-
+            Console.WriteLine("TearDown");
+            ScreenshotDumper.TakeScreenshot();
             WebDriverManager.CloseDriver();
         }
 
         [Test]
-        public void ShouldFindMountRushmoreOnTheMap()
+        public void ShouldFindMountRushmoreOnTheMap() // this test is green
         {
-            mapPage.SearchForEstablishment("Mount Rushmore");
+            mapPage.Search("Mount Rushmore");
+
+            sideMenuPage = mapPage.GetSideMenu();
+
+            sideMenuPage.CheckImageSearchRedirectPresent();
+            sideMenuPage.CheckLocationNamePresent();
+            sideMenuPage.CheckInformationFilterBtnPresent();
+            sideMenuPage.CheckCallToActionBtnAreaPresent();
+            sideMenuPage.CheckLocationInformationAreaPresent();
+            sideMenuPage.CheckAdmissionInformationAreaPresent();
+            sideMenuPage.CheckAtThisPlaceAreaPresent();
+
+            sideMenuPage.CheckLocationTitle("Mount Rushmore National Memorial");
+        }
+
+       [Test]
+        public void ShouldFindTheBMWOfficeInMunich() // this test is green
+        {
+            mapPage.Search("Frankfurter Ring 35");
+
+            sideMenuPage = mapPage.GetSideMenu();
+
+            sideMenuPage.CheckLocationNamePresent();
+            sideMenuPage.CheckCallToActionBtnAreaPresent();
+            sideMenuPage.CheckAtThisPlaceAreaPresent();
+
+            sideMenuPage.CheckLocationTitle("Frankfurter Ring 35");
         }
 
         [Test]
-        public void ShouldFindTheGreatWallOnTheMap()
+        public void ShouldFindBerlinOnTheMap() // this test is red due to failing CheckInformationFilterBtnPresent
         {
-            mapPage.SearchForEstablishment("The Great Wall of China");
+            mapPage.Search("Berlin");
+
+            sideMenuPage = mapPage.GetSideMenu();
+
+            sideMenuPage.CheckImageSearchRedirectPresent();
+            sideMenuPage.CheckLocationNamePresent();
+            sideMenuPage.CheckInformationFilterBtnPresent();
+            sideMenuPage.CheckCallToActionBtnAreaPresent();
+            sideMenuPage.CheckLocationInformationAreaPresent();
+            sideMenuPage.CheckAdmissionInformationAreaPresent();
+            sideMenuPage.CheckAtThisPlaceAreaPresent();
+
+            sideMenuPage.CheckLocationTitle("Berlin");
         }
 
         [Test]
-        public void ShouldFindNiagraFallsOnTheMap()
+        public void ShouldNotFindAnything()
         {
-            mapPage.SearchForEstablishment("Niagra Falls");
-        }
+            mapPage.Search("======================");
 
-        [Test]
-        public void ShouldFindBerlinOnTheMap()
-        {
-            mapPage.SearchForLocation("Berlin");
+            sideMenuPage = mapPage.GetSideMenu();
+
+            sideMenuPage.CheckInvalidLocationHeader("======================");
         }
     }
 }

@@ -1,33 +1,32 @@
 ﻿using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GoogleMapsTest.Pages
 {
-    // caller decides if this makes sense to be used at all
+    // child decides if this makes sense to be used at all
     public sealed class CookiePage : Page
     {
         //TODO refactor these seemingly random attribute names
-        private By rejectCookiesBy = By.XPath("//*[@class=\"VtwTSb\"]//button[@jsname=\"tWT92d\"]");
-        private By acceptCookiesBy = By.XPath("//*[@class=\"VtwTSb\"]//button[@jsname=\"b3VHJd\"]");
+        private readonly By rejectCookiesBy = By.XPath("//*[@class=\"VtwTSb\"]//button[@jsname=\"tWT92d\"]");
+        private readonly By acceptCookiesBy = By.XPath("//*[@class=\"VtwTSb\"]//button[@jsname=\"b3VHJd\"]");
 
         // accounts for the case when the Cookie form is not displayed, don't fail the test
-        private bool elementsLoaded = false;
+        private readonly bool elementsLoaded = false;
 
-        private IWebElement rejectCookiesBtn;
-        private IWebElement acceptCookiesBtn;
+        [AllowNull]
+        private readonly IWebElement rejectCookiesBtn;
+        [AllowNull]
+        private readonly IWebElement acceptCookiesBtn;
 
-        public CookiePage(IWebDriver driver) : base(driver) {
+        // quick and dirty way of handling cookie confirmation page
+        public CookiePage() : base() {
+            Console.WriteLine("Loading Cookie Page");
             InitializePageRoot();
 
             try
             {
-                rejectCookiesBtn = FindElement(rejectCookiesBy);
-                acceptCookiesBtn = FindElement(acceptCookiesBy);
+                rejectCookiesBtn = GetNullableElement(rejectCookiesBy);
+                acceptCookiesBtn = GetNullableElement(acceptCookiesBy);
                 elementsLoaded = true;
             }
             catch (NoSuchElementException e) 
